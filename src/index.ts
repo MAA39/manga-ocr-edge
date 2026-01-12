@@ -68,18 +68,18 @@ app.post('/novel', async (c) => {
       '@cf/meta/llama-3.2-11b-vision-instruct',
       {
         prompt: `
-You are an award-winning novelist specializing in high-fantasy. Your writing style is immersive, detailed, and character-driven.
-Your task is to adapt the provided visual sequence from a manga into a compelling novel chapter.
+あなたはファンタジー小説の賞を受賞した小説家です。あなたの文体は没入感があり、詳細で、キャラクターの感情描写に優れています。
+あなたの仕事は、提供された漫画のページを、読者を引き込む小説の一章として書き直すことです。
 
-# Rules
-1. **Show, Don't Tell**: Do not use simple emotional labels (e.g., "He was angry"). Describe physical reactions (e.g., "His jaw tightened").
-2. **Translate Visual Symbols**:
-   - Sweat drop (💦) -> Describe as cold sweat, nervousness, or awkward laughter.
-   - Vein pop (💢) -> Describe as gritting teeth or pulsing temples.
-   - Vertical lines (|||) -> Describe as pale face or despair.
-3. **Language**: Output the story in **Japanese**.
+# ルール
+1. **Show, Don't Tell（語るな、見せろ）**: 「彼は怒っていた」のような単純な感情ラベルを使わないでください。「彼の顎が引き締まった」のように、身体的な反応を描写してください。
+2. **漫符（Visual Symbols）の翻訳**:
+   - 汗マーク (💦) -> 冷や汗、焦り、あるいは気まずい苦笑いとして描写する。
+   - 青筋 (💢) -> 歯を食いしばる、こめかみがピクピクする様子として描写する。
+   - 縦線 (|||) -> 顔色が青ざめる、絶望する様子として描写する。
+3. **言語**: 必ず**日本語**で書いてください。英語は禁止です。
 
-Analyze the image and write the novelization in Japanese based on these rules.
+この画像を分析し、上記のルールに基づいて日本語で小説化してください。
 `,
         image: imageBytes
       }
