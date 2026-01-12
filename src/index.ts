@@ -98,4 +98,45 @@ app.post('/novel', async (c) => {
   }
 })
 
+// Reverse Adaptation endpoint (Manga -> Original Novel)
+app.post('/original-novel', async (c) => {
+  try {
+    const formData = await c.req.formData()
+    const imageFile = formData.get('image') as unknown as File
+
+    if (!imageFile) {
+      return c.json({ error: 'Image file is required' }, 400)
+    }
+
+    const imageBytes = [...new Uint8Array(await imageFile.arrayBuffer())]
+
+    const result = await c.env.AI.run(
+      '@cf/meta/llama-3.2-11b-vision-instruct',
+      {
+        prompt: `
+あなたは、この漫画の原作となった小説の著者です。
+目の前にある「漫画のワンシーン」は、あなたがかつて書いた小説の文章を元に、漫画家によって描かれたものです。
+その「元となった小説のオリジナルの文章」を、ここでもう一度書き起こしてください。
+
+# 執筆ガイドライン
+1. **原作者としての振る舞い**: 画像を「説明」しないでください。あなたの頭の中にある物語を「語って」ください。
+2. **媒体への言及禁止**: 「コマ」「吹き出し」「絵」「背景」といった、漫画媒体に関する単語は一切使わないでください。あくまで「純粋な物語」として書いてください。
+3. **情報の解凍**: 漫画では絵で一瞬で表現されている「表情」「背景」「スピード感」を、すべて**文学的な文章**（比喩、心理描写、五感）に変換（解凍）してください。
+4. **五感の補完**: 絵には描けない「匂い」「気温」「肌触り」「音」を想像し、文章に加えてください。
+
+# 出力形式
+タイトルと、本文のみを出力してください。
+
+さあ、あなたの物語を書き始めてください。
+`,
+        image: imageBytes
+      }
+    )
+
+    return c.json(result)
+  } catch (e) {
+    return c.json({ error: String(e) }, 500)
+  }
+})
+
 export default app
